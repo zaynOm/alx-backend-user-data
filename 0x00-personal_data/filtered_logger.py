@@ -7,8 +7,7 @@ from typing import List
 
 def filter_datum(
     fields: List[str], redaction: str, message: str, sparator: str
-):
+) -> str:
     """Returns the log message obfuscated"""
     keys = "=|".join(fields)
-    return re.sub(rf"(.+=.+{sparator}{keys}=)(.+?){sparator}",
-                  rf"\1{redaction}{sparator}", message)
+    return re.sub(rf"({keys}=)[^{sparator}]*", rf"\1{redaction}", message)
