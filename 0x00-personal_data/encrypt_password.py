@@ -2,9 +2,13 @@
 """Password hashing and validation"""
 
 import bcrypt
-from typing import ByteString
 
 
-def hash_password(password: str) -> ByteString:
+def hash_password(password: str) -> bytes:
     """Encrypting passwords"""
-    return bcrypt.hashpw(str.encode(password), bcrypt.gensalt())
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
+
+def is_valid(hashed_password: bytes, password: str) -> bool:
+    """Check valid password"""
+    return bcrypt.checkpw(password.encode("utf-8"), hashed_password)
