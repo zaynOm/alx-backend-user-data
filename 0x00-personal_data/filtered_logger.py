@@ -3,6 +3,8 @@
 
 import re
 import logging
+import os
+import mysql.connector
 from typing import List
 
 
@@ -43,3 +45,14 @@ def get_logger() -> logging.Logger:
     stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(stream_handler)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Connect to secure database"""
+    DB_USERNAME = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    DB_PASSWORD = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    DB_HOST = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    DB_NAME = os.getenv("PERSONAL_DATA_DB_NAME")
+    return mysql.connector.connect(
+        user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, database=DB_NAME
+    )
