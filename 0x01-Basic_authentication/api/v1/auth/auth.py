@@ -16,7 +16,7 @@ class Auth:
             if ep.endswith("*") and ep[:-1] in path:
                 return False
 
-        return True
+        return path not in excluded_paths
 
     def authorization_header(self, request=None) -> str:
         """Extract the authorization header"""
