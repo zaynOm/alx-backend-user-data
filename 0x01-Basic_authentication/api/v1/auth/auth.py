@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """Authentication template"""
+from typing import List, TypeVar
 from flask import request
 
 
 class Auth:
-"""Auth class"""
+    """Auth class"""
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-       """Check if auth is required""" 
+        """Check if auth is required"""
         return False
 
     def authorization_header(self, request=None) -> str:
         """Extract the authorization header"""
         return None
-
 
     def current_user(self, request=None) -> TypeVar("User"):
         """Get the current user"""
