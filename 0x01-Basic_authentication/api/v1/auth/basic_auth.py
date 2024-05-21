@@ -52,9 +52,9 @@ class BasicAuth(Auth):
         self, user_email: str, user_pwd: str
     ) -> TypeVar("User"):
         """Get the user with the credentials"""
-        if user_email is None or not isinstance(user_email, str):
+        if user_email is None or type(user_email) is not str:
             return None
-        if user_pwd is None or not isinstance(user_pwd, str):
+        if user_pwd is None or type(user_pwd) is not str:
             return None
         users = User.search({"email": user_email})
         if not users:
