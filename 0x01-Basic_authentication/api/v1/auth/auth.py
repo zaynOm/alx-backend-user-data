@@ -12,7 +12,11 @@ class Auth:
         if path is None or not excluded_paths:
             return True
         path = path if path.endswith("/") else path + "/"
-        return path not in excluded_paths
+        for ep in excluded_paths:
+            if ep.endswith("*") and ep[:-1] in path:
+                return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
         """Extract the authorization header"""
