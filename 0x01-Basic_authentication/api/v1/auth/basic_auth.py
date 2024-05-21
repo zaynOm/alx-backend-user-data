@@ -34,7 +34,7 @@ class BasicAuth(Auth):
             decoded_header = base64.b64decode(base64_authorization_header)
         except Exception:
             return None
-        return decoded_header.decode()
+        return decoded_header.decode(errors="ignore")
 
     def extract_user_credentials(
         self, decoded_base64_authorization_header: str
@@ -63,3 +63,12 @@ class BasicAuth(Auth):
             if user.is_valid_password(user_pwd):
                 return user
         return None
+
+    def current_user(self, request=None) -> TypeVar("User"):
+        """Overloads the current user"""
+        auth_header = self.authorization_header(request)
+        decoded_auth_header = self.decode_base64_authorization_header(
+            self.extract_base64_authorization_header(auth_header)
+        )
+        email, pwd = self.extract_user_credentials(decoded_auth_header)
+        return self.user_object_from_credentials(email, pwd)
