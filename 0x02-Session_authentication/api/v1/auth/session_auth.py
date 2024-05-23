@@ -3,6 +3,7 @@
 
 from uuid import uuid4
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -23,3 +24,9 @@ class SessionAuth(Auth):
         if session_id is None or not isinstance(session_id, str):
             return None
         return SessionAuth.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """Retrives a user instance based on a cookie value"""
+        cookie = self.session_cookie(request)
+        user_id = self.user_id_for_session_id(cookie)
+        return User.get(user_id)
