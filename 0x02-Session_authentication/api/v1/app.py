@@ -31,6 +31,10 @@ if getenv("AUTH_TYPE") == "session_exp_auth":
     from api.v1.auth.session_exp_auth import SessionExpAuth
 
     auth = SessionExpAuth()
+if getenv("AUTH_TYPE") == "session_exp_auth":
+    from api.v1.auth.session_db_auth import SessionDBAuth
+
+    auth = SessionDBAuth()
 
 paths = [
     "/api/v1/status/",
