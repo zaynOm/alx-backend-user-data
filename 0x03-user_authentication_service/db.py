@@ -39,9 +39,9 @@ class DB:
     def find_user_by(self, **kwargs):
         """Find a user"""
         try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-            if not user:
-                raise NoResultFound
-        except InvalidRequestError as e:
-            raise e
+            user = self._session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            raise
+        except InvalidRequestError:
+            raise
         return user
