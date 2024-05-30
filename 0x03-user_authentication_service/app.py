@@ -2,7 +2,7 @@
 """Flask app entry point"""
 
 
-from flask import Flask, abort, jsonify, request
+from flask import Flask, abort, jsonify, redirect, request
 from auth import Auth
 
 
@@ -39,6 +39,17 @@ def login():
     res = jsonify({"email": email, "message": "logged in"})
     res.set_cookie("session_id", session_id)
     return res
+
+
+@app.route("/sessions", methods=["DELETE"])
+def logout():
+    """Logout"""
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+    AUTH.destroy_session(user.id)
+    redirect("/")
 
 
 if __name__ == "__main__":
