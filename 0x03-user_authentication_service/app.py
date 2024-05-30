@@ -19,8 +19,8 @@ def index():
 @app.route("/users", methods=["POST"])
 def users():
     """Register a user"""
-    email = request.form["email"]
-    password = request.form["password"]
+    email = request.form.get("email")
+    password = request.form.get("password")
     try:
         AUTH.register_user(email, password)
     except ValueError:
@@ -31,8 +31,8 @@ def users():
 @app.route("/sessions", methods=["POST"])
 def login():
     """Login a user"""
-    email = request.form["email"]
-    password = request.form["password"]
+    email = request.form.get("email")
+    password = request.form.get("password")
     if not AUTH.valid_login(email, password):
         abort(401)
     session_id = AUTH.create_session(email)
@@ -60,6 +60,17 @@ def profile():
     if user is None:
         abort(403)
     return jsonify({"email": user.email})
+
+
+@app.route("/reset_password", methods=["POST"])
+def get_reset_password_token():
+    """Get reset password token"""
+    email = request.form.get("email")
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email, "reset_token": reset_token})
+    except ValueError:
+        abort(403)
 
 
 if __name__ == "__main__":
